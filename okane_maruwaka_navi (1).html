@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>お金まるわかナビ｜個人事業主1年目のお金、全部わかる</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --pink:#E8A0BF;--pink-light:#FDF0F6;--pink-mid:#F5C6DC;--pink-dark:#A0527A;
+  --lav:#C8B4E8;--lav-light:#F3EEFB;--lav-dark:#6B4A9B;
+  --sage:#A8D5BA;--sage-light:#EDF7F1;--sage-dark:#3D7A58;
+  --amber:#F5C26B;--amber-light:#FEF7E7;--amber-dark:#8A5C00;
+  --text:#4A3550;--text2:#8A7090;--text3:#C8B4C8;
+  --bg:#FDFAFF;--card:#FFFFFF;--border:#EDE0F5;
+}
+html,body{width:100%;overflow-x:hidden;}
+body{background:var(--bg);font-family:'Zen Maru Gothic',sans-serif;color:var(--text);min-height:100vh;padding:12px;}
+.container{max-width:480px;margin:0 auto;width:100%;}
+.app-header{text-align:center;margin-bottom:1.2rem;padding:1.2rem 1rem 1.4rem;background:linear-gradient(135deg,var(--pink-light) 0%,var(--lav-light) 100%);border-radius:20px;position:relative;overflow:hidden;}
+.app-header::before{content:'';position:absolute;top:-20px;right:-20px;width:80px;height:80px;background:var(--pink-mid);border-radius:50%;opacity:0.3;}
+.app-header::after{content:'';position:absolute;bottom:-15px;left:10px;width:50px;height:50px;background:var(--lav);border-radius:50%;opacity:0.2;}
+.app-title{font-size:20px;font-weight:700;color:var(--pink-dark);margin-bottom:4px;}
+.app-sub{font-size:12px;color:var(--text2);}
+.tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;margin-bottom:1.2rem;}
+.tab{padding:6px 2px;font-size:10px;cursor:pointer;border:1.5px solid var(--border);background:var(--card);color:var(--text2);border-radius:12px;text-align:center;line-height:1.4;font-family:'Zen Maru Gothic',sans-serif;transition:all 0.2s;-webkit-tap-highlight-color:transparent;}
+.tab.active{background:linear-gradient(135deg,var(--pink-light),var(--lav-light));color:var(--lav-dark);border-color:var(--lav);font-weight:700;}
+.tab-icon{font-size:14px;display:block;margin-bottom:2px;}
+.sec{display:none;}.sec.active{display:block;}
+.card{background:var(--card);border:1.5px solid var(--border);border-radius:16px;padding:12px 14px;margin-bottom:10px;width:100%;}
+.card-title{font-size:13px;font-weight:700;margin-bottom:4px;color:var(--pink-dark);}
+.card-sub{font-size:11px;color:var(--text2);margin-bottom:10px;line-height:1.6;}
+.metric-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:10px;}
+.metric{border-radius:12px;padding:8px 6px;text-align:center;}
+.mg{background:linear-gradient(135deg,#FDF0F6,#F3EEFB);border:1.5px solid var(--pink-mid);}
+.mb{background:linear-gradient(135deg,#F3EEFB,#EAF5FF);border:1.5px solid var(--lav);}
+.ms{background:linear-gradient(135deg,var(--sage-light),#F3EEFB);border:1.5px solid var(--sage);}
+.mlabel{font-size:9px;color:var(--text2);margin-bottom:3px;line-height:1.4;}
+.mval{font-size:15px;font-weight:700;}
+.gpink{color:var(--pink-dark);}.glav{color:var(--lav-dark);}.gsage{color:var(--sage-dark);}
+.row{display:flex;align-items:flex-start;gap:6px;margin-bottom:10px;flex-wrap:nowrap;}
+.row-inner{flex:1;min-width:0;}
+.row label{font-size:12px;color:var(--text2);min-width:0;line-height:1.4;display:block;margin-bottom:3px;font-weight:700;}
+.row input[type=number]{width:100%;font-size:14px;padding:8px 10px;border:1.5px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);text-align:right;font-family:'Zen Maru Gothic',sans-serif;}
+.row input[type=range]{width:100%;accent-color:var(--pink);margin-top:4px;}
+.row .unit{font-size:12px;color:var(--text3);white-space:nowrap;padding-top:10px;}
+.row .rval{font-size:12px;font-weight:700;white-space:nowrap;color:var(--lav-dark);padding-top:10px;}
+.hint{font-size:10px;color:var(--text2);line-height:1.5;margin-top:3px;padding:6px 8px;background:var(--lav-light);border-radius:8px;}
+.result-row{display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:1px dashed var(--border);font-size:12px;gap:8px;}
+.result-row:last-child{border-bottom:none;}
+.rlabel{color:var(--text2);flex:1;line-height:1.5;}
+.rlabel-hint{font-size:10px;color:var(--text3);display:block;margin-top:2px;}
+.rval2{font-weight:700;color:var(--text);white-space:nowrap;}
+.tip{background:linear-gradient(135deg,var(--pink-light),var(--lav-light));border:1.5px solid var(--pink-mid);border-radius:14px;padding:12px 14px;font-size:12px;color:var(--pink-dark);line-height:1.8;margin-top:8px;}
+.tok-big{background:linear-gradient(135deg,var(--sage-light),var(--lav-light));border:1.5px solid var(--sage);border-radius:16px;padding:14px;margin-bottom:10px;text-align:center;}
+.tok-big-label{font-size:11px;color:var(--sage-dark);margin-bottom:6px;}
+.tok-big-val{font-size:28px;font-weight:700;color:var(--sage-dark);margin-bottom:4px;}
+.tok-big-sub{font-size:11px;color:var(--text2);}
+.tok-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:10px;}
+.tok-card{background:var(--card);border:1.5px solid var(--border);border-radius:12px;padding:10px 6px;text-align:center;}
+.tok-card-icon{font-size:16px;margin-bottom:3px;}
+.tok-card-label{font-size:9px;color:var(--text2);margin-bottom:4px;line-height:1.4;}
+.tok-card-val{font-size:12px;font-weight:700;color:var(--sage-dark);}
+.more-block{background:linear-gradient(135deg,var(--amber-light),var(--pink-light));border:1.5px solid var(--amber);border-radius:14px;padding:12px 14px;margin-bottom:10px;}
+.more-title{font-size:12px;font-weight:700;color:var(--amber-dark);margin-bottom:8px;}
+.more-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px dashed rgba(245,194,107,0.4);font-size:11px;gap:8px;}
+.more-row:last-child{border-bottom:none;}
+.more-label{color:var(--text2);flex:1;}
+.more-val{font-weight:700;color:var(--amber-dark);white-space:nowrap;}
+.motiv{background:linear-gradient(135deg,var(--pink-light),var(--lav-light));border:1.5px solid var(--pink-mid);border-radius:14px;padding:12px 14px;font-size:12px;color:var(--pink-dark);line-height:1.8;}
+.check-item{display:flex;gap:8px;align-items:flex-start;padding:9px 0;border-bottom:1px dashed var(--border);}
+.check-item:last-child{border-bottom:none;}
+.ci-text{font-size:12px;line-height:1.5;color:var(--text);flex:1;}
+.ci-sub{font-size:10px;color:var(--text2);margin-top:2px;line-height:1.5;}
+.ihead{display:grid;grid-template-columns:1fr 68px 48px 58px 20px;gap:3px;font-size:9px;color:var(--text2);margin-bottom:4px;}
+.irow{display:grid;grid-template-columns:1fr 68px 48px 58px 20px;gap:3px;align-items:center;margin-bottom:6px;}
+.irow input[type=text]{font-size:11px;padding:5px 6px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font-family:'Zen Maru Gothic',sans-serif;width:100%;}
+.irow input[type=number]{font-size:11px;padding:5px 4px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);text-align:right;width:100%;font-family:'Zen Maru Gothic',sans-serif;}
+.irow .pct{text-align:center;}
+.irow .pct input[type=range]{width:100%;accent-color:var(--lav-dark);}
+.irow .pn{font-size:9px;font-weight:700;color:var(--lav-dark);}
+.irow .yen{font-size:10px;font-weight:700;color:var(--lav-dark);text-align:right;}
+.del-btn{background:none;border:none;cursor:pointer;color:var(--text3);font-size:14px;padding:0;}
+.add-btn{width:100%;padding:8px;font-size:12px;border:1.5px dashed var(--pink-mid);border-radius:10px;background:var(--pink-light);color:var(--pink-dark);cursor:pointer;margin-top:4px;font-family:'Zen Maru Gothic',sans-serif;}
+.compare-row{display:flex;align-items:center;padding:5px 0;border-bottom:1px dashed var(--border);gap:6px;}
+.compare-row:last-child{border-bottom:none;}
+.cbar-wrap{flex:1;background:var(--pink-light);border-radius:4px;height:6px;overflow:hidden;min-width:0;}
+.cbar{height:6px;border-radius:4px;}
+.badge{display:inline-block;font-size:9px;padding:2px 6px;border-radius:20px;font-weight:700;}
+.blav{background:var(--lav-light);color:var(--lav-dark);}
+.section-hint{background:var(--amber-light);border:1.5px solid var(--amber);border-radius:12px;padding:10px 12px;margin-bottom:10px;font-size:11px;color:var(--amber-dark);line-height:1.7;}
+.section-hint-title{font-weight:700;margin-bottom:4px;font-size:12px;}
+.footer{text-align:center;margin-top:2rem;font-size:10px;color:var(--text3);line-height:1.6;}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="app-header">
+    <div class="app-title">お金まるわかナビ</div>
+    <div class="app-sub">個人事業主1年目のお金、全部わかる</div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('check')"><span class="tab-icon">📊</span>現状</button>
+    <button class="tab" onclick="showTab('sim')"><span class="tab-icon">💰</span>手取り</button>
+    <button class="tab" onclick="showTab('goal')"><span class="tab-icon">✨</span>節税</button>
+    <button class="tab" onclick="showTab('kehi')"><span class="tab-icon">🧾</span>経費</button>
+    <button class="tab" onclick="showTab('list')"><span class="tab-icon">✅</span>リスト</button>
+  </div>
+
+  <!-- 現状 -->
+  <div class="sec active" id="sec-check">
+    <div class="section-hint">
+      <div class="section-hint-title">この画面の使い方</div>
+      3つの数字を入れると、お金持ちタイプと比べて今どの位置にいるかがわかります。まずはざっくりでOK！
+    </div>
+    <div class="card">
+      <div class="card-title">あなたの数字を入れてみて</div>
+      <div class="row">
+        <div class="row-inner">
+          <label>年収（売上の合計）</label>
+          <input type="number" id="c-inc" value="200" oninput="calcCheck()">
+          <div class="hint">去年または今年の売上合計。源泉徴収票がある人は「支払金額」の数字を入れてね。</div>
+        </div>
+        <span class="unit">万円</span>
+      </div>
+      <div class="row">
+        <div class="row-inner">
+          <label>税金＋国保・年金（年間）</label>
+          <input type="number" id="c-tax" value="40" oninput="calcCheck()">
+          <div class="hint">所得税＋住民税＋国民健康保険料＋国民年金の年間合計。わからなければ年収の約20%を目安に入れてみて。</div>
+        </div>
+        <span class="unit">万円</span>
+      </div>
+      <div class="row">
+        <div class="row-inner">
+          <label>いまの貯金・資産の合計</label>
+          <input type="number" id="c-ast" value="100" oninput="calcCheck()">
+          <div class="hint">銀行の貯金＋株・投資信託などすべて合計した金額。</div>
+        </div>
+        <span class="unit">万円</span>
+      </div>
+    </div>
+    <div class="metric-grid">
+      <div class="metric mb"><div class="mlabel">貯金は年収の何倍？</div><div class="mval glav" id="c-r1">—</div></div>
+      <div class="metric mg"><div class="mlabel">年収の何％が税金？</div><div class="mval gpink" id="c-r2">—</div></div>
+      <div class="metric ms"><div class="mlabel">貯金に対する税金割合</div><div class="mval gsage" id="c-r3">—</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">3タイプと比べてみよう</div>
+      <div class="card-sub">貯金が年収の何倍あるか（多いほど◎）</div>
+      <div id="c-compare"></div>
+    </div>
+    <div class="tip" id="c-tip"></div>
+  </div>
+
+  <!-- 手取り -->
+  <div class="sec" id="sec-sim">
+    <div class="section-hint">
+      <div class="section-hint-title">この画面の使い方</div>
+      売上・経費・iDeCoを入れると、実際に手元に残る金額がわかります。数字を変えながら試してみてね！
+    </div>
+    <div class="card">
+      <div class="card-title">手取りをシミュレーション</div>
+      <div class="row">
+        <div class="row-inner">
+          <label>年収（売上の合計）</label>
+          <input type="number" id="s-inc" value="200" oninput="calcSim();calcGoal()">
+        </div>
+        <span class="unit">万円</span>
+      </div>
+      <div class="row">
+        <div class="row-inner">
+          <label>仕事の経費（年間合計）</label>
+          <input type="number" id="s-exp" value="20" oninput="calcSim();calcGoal()">
+          <div class="hint">スマホ代・サブスク・交通費など仕事で使った金額の合計。経費タブで詳しく計算できるよ。</div>
+        </div>
+        <span class="unit">万円</span>
+      </div>
+      <div class="row">
+        <div class="row-inner">
+          <label>iDeCo（月いくら積立？）</label>
+          <input type="range" min="0" max="68000" step="1000" value="0" id="s-ideco" oninput="calcSim();calcGoal()">
+          <div class="hint">iDeCoは積み立てた金額が全額税金から引けるお得な制度。個人事業主は月最大6.8万円まで。</div>
+        </div>
+        <span class="rval" id="s-idecoV">積立なし</span>
+      </div>
+    </div>
+    <div class="metric-grid">
+      <div class="metric mb"><div class="mlabel">事業の利益</div><div class="mval glav" id="s-shotoku">—</div></div>
+      <div class="metric mg"><div class="mlabel">税金＋社会保険料</div><div class="mval gpink" id="s-tax">—</div></div>
+      <div class="metric ms"><div class="mlabel">実際の手取り（年）</div><div class="mval gsage" id="s-tedori">—</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title">内訳</div>
+      <div class="result-row">
+        <span class="rlabel">青色申告の特典
+          <span class="rlabel-hint">青色申告をすると自動で65万円が収入から引かれて税金が安くなる特典</span>
+        </span>
+        <span class="rval2">－65万円</span>
+      </div>
+      <div class="result-row">
+        <span class="rlabel">国民年金
+          <span class="rlabel-hint">月約1.7万円の固定。老後のための積立で全額税金から引けるよ</span>
+        </span>
+        <span class="rval2" id="s-nenkin">—</span>
+      </div>
+      <div class="result-row">
+        <span class="rlabel">国民健康保険
+          <span class="rlabel-hint">前年の所得をもとに計算される。収入が低いと減額される場合も</span>
+        </span>
+        <span class="rval2" id="s-kokuho">—</span>
+      </div>
+      <div class="result-row">
+        <span class="rlabel">所得税（概算）
+          <span class="rlabel-hint">1年間の利益にかかる国への税金。確定申告で精算する</span>
+        </span>
+        <span class="rval2" id="s-szei">—</span>
+      </div>
+      <div class="result-row">
+        <span class="rlabel">住民税（概算）
+          <span class="rlabel-hint">住んでいる市区町村への税金。翌年6月から請求が来る</span>
+        </span>
+        <span class="rval2" id="s-jzei">—</span>
+      </div>
+      <div class="result-row">
+        <span class="rlabel">手取り（月換算）</span>
+        <span class="rval2 gsage" id="s-month">—</span>
+      </div>
+    </div>
+    <div class="tip" id="s-tip"></div>
+  </div>
+
+  <!-- 節税メリット -->
+  <div class="sec" id="sec-goal">
+    <div class="section-hint">
+      <div class="section-hint-title">節税メリットとは？</div>
+      「何も対策しなかった場合」と比べて、青色申告・経費・iDeCoを使うことで税金がどれだけ安くなっているかを示しています。数字が大きいほど上手に節税できているサインです！
+    </div>
+    <div class="card-sub" style="margin-bottom:8px;font-size:11px;color:var(--text2)">手取りタブの数字を元に自動計算しています</div>
+    <div class="tok-big">
+      <div class="tok-big-label">何も対策しない場合より</div>
+      <div class="tok-big-val" id="g-total">—</div>
+      <div class="tok-big-sub">税金が安くなっています！</div>
+    </div>
+    <div class="tok-cards">
+      <div class="tok-card">
+        <div class="tok-card-icon">📋</div>
+        <div class="tok-card-label">青色申告で</div>
+        <div class="tok-card-val" id="g-blue">—</div>
+      </div>
+      <div class="tok-card">
+        <div class="tok-card-icon">🧾</div>
+        <div class="tok-card-label">経費計上で</div>
+        <div class="tok-card-val" id="g-exp">—</div>
+      </div>
+      <div class="tok-card">
+        <div class="tok-card-icon">💎</div>
+        <div class="tok-card-label">iDeCoで</div>
+        <div class="tok-card-val" id="g-ideco">—</div>
+      </div>
+    </div>
+    <div class="more-block">
+      <div class="more-title">さらにここまで得できる！</div>
+      <div id="g-more"></div>
+    </div>
+    <div class="motiv" id="g-motiv"></div>
+  </div>
+
+  <!-- 経費 -->
+  <div class="sec" id="sec-kehi">
+    <div class="section-hint">
+      <div class="section-hint-title">按分（あんぶん）って何？</div>
+      仕事とプライベート両方で使っているものは、仕事で使う割合だけ経費にできます。これを「按分」といいます。例えばスマホを仕事60%・プライベート40%で使っているなら、スマホ代の60%が経費になります。スライダーで割合を調整してね！
+    </div>
+    <div class="card">
+      <div class="card-title">仕事の経費を入れてみよう</div>
+      <div class="ihead"><span>項目名</span><span>月額（円）</span><span>仕事%</span><span style="text-align:right">年間</span><span></span></div>
+      <div id="kehi-list"></div>
+      <button class="add-btn" onclick="addKehi()">＋ 項目を追加する</button>
+    </div>
+    <div class="metric-grid">
+      <div class="metric mb"><div class="mlabel">年間経費の合計</div><div class="mval glav" id="k-total">—</div></div>
+      <div class="metric mg"><div class="mlabel">月換算</div><div class="mval gpink" id="k-month">—</div></div>
+      <div class="metric ms"><div class="mlabel">税金が安くなる金額</div><div class="mval gsage" id="k-setsu">—</div></div>
+    </div>
+    <div class="card">
+      <div class="result-row">
+        <span class="rlabel">所得税率
+          <span class="rlabel-hint">わからなければ10のまま。年収200万円前後なら5〜10%が目安</span>
+        </span>
+        <div style="display:flex;align-items:center;gap:4px;">
+          <input type="number" id="k-taxrate" value="10" min="5" max="45" oninput="calcKehi()" style="width:50px;font-size:13px;padding:4px 6px;border:1.5px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);text-align:right;font-family:'Zen Maru Gothic',sans-serif;">
+          <span style="font-size:12px;color:var(--text3)">%</span>
+        </div>
+      </div>
+      <div id="k-breakdown"></div>
+    </div>
+    <div class="tip" id="k-tip"></div>
+  </div>
+
+  <!-- リスト -->
+  <div class="sec" id="sec-list">
+    <div class="card">
+      <div class="card-title">これって経費になる？</div>
+      <div class="card-sub">迷ったときのチェックリスト。💚はOK、💛は条件付きOK、🩷はNG</div>
+      <div class="check-item"><div style="font-size:14px">💚</div><div class="ci-text">スマホ・ネット代<div class="ci-sub">仕事で使う分だけOK。「仕事60%・プライベート40%」のように分けて申告しよう。</div></div></div>
+      <div class="check-item"><div style="font-size:14px">💚</div><div class="ci-text">仕事で使うアプリ・サービスの月額<div class="ci-sub">Canva・Claude・Microsoft365など仕事用は全額OK。</div></div></div>
+      <div class="check-item"><div style="font-size:14px">💚</div><div class="ci-text">仕事の移動にかかった交通費<div class="ci-sub">電車・バス・タクシーなど仕事の移動は全額OK。ICカードの明細を保存しよう。</div></div></div>
+      <div class="check-item"><div style="font-size:14px">💚</div><div class="ci-text">仕事に関係する本・勉強代<div class="ci-sub">ビジネス書・オンライン講座・セミナー参加費はOK。</div></div></div>
+      <div class="check-item"><div style="font-size:14px">💚</div><div class="ci-text">文房具・備品など消耗品<div class="ci-sub">10万円未満のものはその年に全額経費にできる。</div></div></div>
+      <div class="check-item"><div style="font-size:14px">💛</div><div class="ci-text">仕事の打ち合わせで使ったカフェ・食事代<div class="ci-sub">仕事の話をした場合はOK。レシートに「誰と・何の話」を書いておくと安心。</div></div></div>
+      <div class="check-item"><div style="font-size:14px">💛</div><div class="ci-text">自宅の家賃・電気代<div class="ci-sub">在宅で仕事してるなら「仕事スペースの割合分」だけOK。例：部屋の1/3が仕事スペースなら33%。</div></div></div>
+      <div class="check-item"><div style="font-size:14px">💛</div><div class="ci-text">仕事用の服・美容代<div class="ci-sub">仕事専用のものはOK。普段も着る服はNG。</div></div></div>
+      <div class="check-item"><div style="font-size:14px">🩷</div><div class="ci-text">プライベートの旅行・外食<div class="ci-sub">仕事と関係ないものは経費にできないよ。</div></div></div>
+      <div class="check-item"><div style="font-size:14px">🩷</div><div class="ci-text">国民健康保険・国民年金<div class="ci-sub">経費じゃないけど「社会保険料控除」として税金を減らせる。確定申告で自動的に引いてくれるよ。</div></div></div>
+    </div>
+    <div class="tip">迷ったら「仕事のために必要な支出か？」と自問してみて。レシートは必ず保管しておこう！</div>
+  </div>
+
+  <div class="footer">お金まるわかナビ｜数字はすべて概算です。正確な金額は税理士にご相談ください。</div>
+</div>
+
+<script>
+function showTab(t){
+  ['check','sim','goal','kehi','list'].forEach(s=>{document.getElementById('sec-'+s).className='sec'+(s===t?' active':'');});
+  document.querySelectorAll('.tab').forEach((el,i)=>{el.className='tab'+(['check','sim','goal','kehi','list'][i]===t?' active':'');});
+  if(t==='goal') calcGoal();
+  if(t==='check') calcCheck();
+  if(t==='sim') calcSim();
+  if(t==='kehi') calcKehi();
+}
+function doCalc(incMan,expMan,idecoM,useBlue){
+  const inc=incMan*10000,exp=expMan*10000,idecoY=idecoM*12;
+  const jigyo=Math.max(0,inc-exp);
+  const nenkin=203760;
+  const kokuho=Math.max(20000,Math.min(Math.max(0,jigyo-430000)*0.088,870000));
+  const blue=useBlue?650000:0;
+  const kazei=Math.max(0,jigyo-blue-480000-nenkin-kokuho-idecoY);
+  let szei=0;
+  if(kazei<=1950000) szei=kazei*0.05;
+  else if(kazei<=3300000) szei=kazei*0.10-97500;
+  else if(kazei<=6950000) szei=kazei*0.20-427500;
+  else szei=kazei*0.23-636000;
+  szei=Math.max(0,szei)*1.021;
+  const jzei=Math.max(0,kazei*0.10+5000);
+  const totalTax=szei+jzei+nenkin+kokuho;
+  return{jigyo,totalTax,tedori:Math.max(0,jigyo-totalTax),szei,jzei,nenkin,kokuho};
+}
+function calcCheck(){
+  const inc=parseFloat(document.getElementById('c-inc').value)||0;
+  const tax=parseFloat(document.getElementById('c-tax').value)||0;
+  const ast=parseFloat(document.getElementById('c-ast').value)||0;
+  const r1=inc>0?ast/inc:0,r2=inc>0?tax/inc*100:0,r3=ast>0?tax/ast*100:0;
+  document.getElementById('c-r1').textContent=r1.toFixed(2)+'倍';
+  document.getElementById('c-r2').textContent=r2.toFixed(1)+'%';
+  document.getElementById('c-r3').textContent=ast>0?r3.toFixed(1)+'%':'—';
+  const types=[['高収入サラリーマン',0.8,'#E8A0BF'],['リベ的小金持ち',7.1,'#A8D5BA'],['リベ的FIRE民',26.5,'#C8B4E8']];
+  document.getElementById('c-compare').innerHTML=[['あなた',r1,'#E8A0BF'],...types].map(([n,v,c])=>`<div class="compare-row"><span style="min-width:95px;font-size:10px">${n}</span><div class="cbar-wrap"><div class="cbar" style="width:${Math.min(v/30*100,100)}%;background:${c}"></div></div><span style="font-size:11px;font-weight:700;min-width:38px;text-align:right;color:#4A3550">${Number(v).toFixed(1)}倍</span></div>`).join('');
+  document.getElementById('c-tip').innerHTML='✨ '+(r1<1?'まず貯金を年収と同じ金額にすることを目標に！':r1<7?'貯金が年収を超えてるよ、いい調子！次は節税で手取りを増やそう':'資産形成が進んでいます。この調子でいこう！');
+}
+function calcSim(){
+  const inc=parseFloat(document.getElementById('s-inc').value)||0;
+  const exp=parseFloat(document.getElementById('s-exp').value)||0;
+  const idecoM=parseInt(document.getElementById('s-ideco').value)||0;
+  document.getElementById('s-idecoV').textContent=idecoM===0?'積立なし':(idecoM/10000).toFixed(1)+'万円/月';
+  const r=doCalc(inc,exp,idecoM,true);
+  const f=n=>Math.round(n).toLocaleString()+'円';
+  const fm=n=>'約'+Math.round(n/10000)+'万円';
+  document.getElementById('s-shotoku').textContent=fm(r.jigyo);
+  document.getElementById('s-tax').textContent=fm(r.totalTax);
+  document.getElementById('s-tedori').textContent=fm(r.tedori);
+  document.getElementById('s-nenkin').textContent='－'+f(r.nenkin);
+  document.getElementById('s-kokuho').textContent='－'+f(Math.round(r.kokuho));
+  document.getElementById('s-szei').textContent='－'+f(Math.round(r.szei));
+  document.getElementById('s-jzei').textContent='－'+f(Math.round(r.jzei));
+  document.getElementById('s-month').textContent=fm(r.tedori/12)+'/月';
+  const tips=[];
+  if(idecoM===0) tips.push('iDeCoを月2万円積み立てると年間約4万円税金が安くなるよ');
+  if(exp<inc*0.1) tips.push('仕事の経費をもっと計上できると税金が減るよ');
+  document.getElementById('s-tip').innerHTML='✨ '+(tips.length?tips.join('。')+'。':'いい感じ！この調子で！');
+}
+function calcGoal(){
+  const inc=parseFloat(document.getElementById('s-inc').value)||0;
+  const exp=parseFloat(document.getElementById('s-exp').value)||0;
+  const idecoM=parseInt(document.getElementById('s-ideco').value)||0;
+  const fm=n=>Math.round(n/10000)+'万円';
+  const r_nothing=doCalc(inc,0,0,false);
+  const r_blue=doCalc(inc,0,0,true);
+  const r_exp=doCalc(inc,exp,0,true);
+  const r_now=doCalc(inc,exp,idecoM,true);
+  const r_full=doCalc(inc,exp,68000,true);
+  const blueSave=Math.max(0,r_nothing.totalTax-r_blue.totalTax);
+  const expSave=Math.max(0,r_blue.totalTax-r_exp.totalTax);
+  const idecoSave=Math.max(0,r_exp.totalTax-r_now.totalTax);
+  const totalSave=Math.max(0,r_nothing.totalTax-r_now.totalTax);
+  const moreIdeco=Math.max(0,r_now.totalTax-r_full.totalTax);
+  document.getElementById('g-total').textContent=fm(totalSave);
+  document.getElementById('g-blue').textContent=fm(blueSave)+'お得';
+  document.getElementById('g-exp').textContent=fm(expSave)+'お得';
+  document.getElementById('g-ideco').textContent=idecoM>0?fm(idecoSave)+'お得':'まだ使ってない';
+  let moreHtml='';
+  if(moreIdeco>0) moreHtml+=`<div class="more-row"><span class="more-label">iDeCoを月6.8万円（上限）にすると</span><span class="more-val">さらに${fm(moreIdeco)}お得</span></div>`;
+  if(exp<inc*0.15){const expMore=Math.max(0,r_exp.totalTax-doCalc(inc,inc*0.15,idecoM,true).totalTax);moreHtml+=`<div class="more-row"><span class="more-label">経費をもう少し計上できると</span><span class="more-val">さらに${fm(expMore)}お得</span></div>`;}
+  if(!moreHtml) moreHtml=`<div class="more-row"><span class="more-label">節税はほぼフル活用できています！</span><span class="more-val">すごい</span></div>`;
+  document.getElementById('g-more').innerHTML=moreHtml;
+  document.getElementById('g-motiv').innerHTML='✨ '+(totalSave>200000?'節税の効果がしっかり出てるよ！このまま続けよう':totalSave>50000?'節税できてるよ！iDeCoも使うともっとお得になるよ':'まずは経費の計上から始めよう。少しずつ節税できるよ！');
+}
+let kehiItems=[{name:'スマホ代',monthly:6000,pct:60},{name:'ネット回線',monthly:4000,pct:50},{name:'サブスク（Canva等）',monthly:1500,pct:100},{name:'交通費',monthly:3000,pct:100}];
+function addKehi(){kehiItems.push({name:'',monthly:0,pct:100});renderKehi();}
+function removeKehi(i){kehiItems.splice(i,1);renderKehi();calcKehi();}
+function renderKehi(){
+  document.getElementById('kehi-list').innerHTML=kehiItems.map((item,i)=>`<div class="irow"><input type="text" value="${item.name}" placeholder="例：Claudeプラン" oninput="kehiItems[${i}].name=this.value"><input type="number" value="${item.monthly}" min="0" oninput="kehiItems[${i}].monthly=parseInt(this.value)||0;calcKehi()"><div class="pct"><div class="pn">${item.pct}%</div><input type="range" min="0" max="100" step="10" value="${item.pct}" oninput="kehiItems[${i}].pct=parseInt(this.value);renderKehi();calcKehi()"></div><div class="yen">${Math.round(item.monthly*item.pct/100*12).toLocaleString()}円</div><button class="del-btn" onclick="removeKehi(${i})">×</button></div>`).join('');
+}
+function calcKehi(){
+  renderKehi();
+  const total=kehiItems.reduce((s,it)=>s+it.monthly*it.pct/100*12,0);
+  const taxrate=(parseInt(document.getElementById('k-taxrate').value)||10)/100;
+  const setsu=total*(taxrate+0.10);
+  const f=n=>Math.round(n).toLocaleString()+'円';
+  document.getElementById('k-total').textContent=f(total);
+  document.getElementById('k-month').textContent=f(total/12);
+  document.getElementById('k-setsu').textContent='約'+f(setsu);
+  document.getElementById('k-breakdown').innerHTML=kehiItems.map(it=>{const y=Math.round(it.monthly*it.pct/100*12);if(!it.name&&y===0)return '';return `<div class="result-row"><span class="rlabel">${it.name||'（未入力）'} <span class="badge blav">${it.pct}%</span></span><span class="rval2">${y.toLocaleString()}円/年</span></div>`;}).join('')+`<div class="result-row"><span class="rlabel" style="font-weight:700">合計</span><span class="rval2 glav">${f(total)}</span></div>`;
+  document.getElementById('k-tip').innerHTML=`✨ この経費のおかげで税金が約${f(setsu)}安くなるよ！レシートは必ず保管してね！`;
+}
+calcCheck();calcSim();calcGoal();calcKehi();
+</script>
+</body>
+</html>
